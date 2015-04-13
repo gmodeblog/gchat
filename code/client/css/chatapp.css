@@ -1,0 +1,52 @@
+body {
+  background-image: url('http://40.media.tumblr.com/e85d07b089804c953f8706d61464474d/tumblr_mnbvpfAf6a1qzinh8o1_1280.jpg');
+  background-position: center top;
+}
+.app .header {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.app .header .info {
+  padding: 8pt;
+}
+.app .header .info .name {
+  font-size: 13pt;
+  color: #a7a832;
+  display: 'inline-block';
+  margin-left: 8pt;
+  margin-right: 6pt;
+}
+.app .header .info .username {
+  font-size: 11pt;
+  color: #eee;
+  display: 'inline-block';
+}
+.app .header .message-form {
+  position: relative;
+  padding: 8pt 8pt 0 8pt;
+  color: #aaa;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.app .header .message-form #message_box {
+  width: 100%;
+  box-sizing: border-box;
+  height: 2.6em;
+  margin-bottom: 5pt;
+}
+.app .header .message-form .action {
+  text-align: right;
+  padding-bottom: 6pt;
+}
+.app #messages {
+  padding: 8pt;
+}
+.app #messages .message {
+  padding: 12pt;
+  min-height: 32pt;
+  margin-bottom: 1px;
+}
+.app #messages .user_added {
+  background-color: rgba(255, 255, 255, 0.45);
+}
+.app #messages .chat {
+  background-color: rgba(255, 255, 255, 0.92);
+}

@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+require 'thor'
+
+class GCSBuildCLI < Thor
+
+  @@packages = [
+    "vendor/nuget/WebSocketSharp.1.0.3-rc7/lib/websocket-sharp.dll",
+    "vendor/nuget/MongoDB.Driver/lib/net45/MongoDB.Driver.dll",
+    "vendor/nuget/MongoDB.Bson/lib/net45/MongoDB.Bson.dll",
+    "vendor/nuget/MongoDB.Driver.Core/lib/net45/MongoDB.Driver.Core.dll",
+    "vendor/nuget/mongocsharpdriver/lib/net45/MongoDB.Driver.Legacy.dll",
+    "vendor/nuget/Newtonsoft.Json/lib/net45/Newtonsoft.Json.dll"
+  ]
+
+  package_name "CSBuild"
+
+  desc "build", "ソースをビルドする。"
+  def build
+    cmd = "mcs -out:app.exe -recurse:'*.cs' -main:App "
+    @@packages.each do |fpath|
+      fname = File.basename(fpath)
+      `cp #{fpath} ./#{fname}`
+      cmd << " -r:#{fname} "
+    end
+    $> << "[BUILD] #{cmd}\n"
+    system cmd
+  end
+
+  namespace :nuget
+  desc "install nuget [PACKAGENAME]", "nugetパッケージをインストールする。"
+  def install(type, package_name)
+    if type == "nuget"
+      puts "[package_name] #{package_name}"
+      cmd = "mono nuget.exe install #{package_name} -OutputDirectory vendor/nuget -ExcludeVersion"
+      system cmd
+    end
+  end
+
+
+end
+
+GCSBuildCLI.start(ARGV)

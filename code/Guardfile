@@ -1,0 +1,6 @@
+guard :shell do
+  watch(/(.*).less/) { |m|
+    result = m[0].gsub(/.less$/, '.css')
+    `lessc #{m[0]} #{result}`
+  }
+end

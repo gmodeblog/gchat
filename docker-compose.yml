@@ -1,0 +1,15 @@
+web:
+  name: gchatapp
+  image: mito/mono:devblog
+  volumes:
+    - code:/code
+  ports:
+    - "3000:80"
+    - "57200:57200"
+  links:
+    - db
+
+db:
+  name: gchatdb
+  image: mongo
+  command: mongod --smallfiles

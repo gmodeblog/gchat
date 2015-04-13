@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>gCHAT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/chatapp.css" rel="stylesheet" media="screen">
+</head>
+<body>
+<div class="app">
+    <div class="header">
+        <div class="info">
+            <span class="name">gCHAT</span>
+            <span id="username" class="username"></span>
+        </div>
+        <div class="message-form" id="message-form">
+            <form>
+                <div >
+                    <input type="text"  id="message_box" placeholder="メッセージを入力してください" />
+                </div>
+                <div class="action">
+                    <button type="button" class="btn btn-default" id="send_button">投稿</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <div id="messages">
+        <script id="user_added_template" type="x-tmpl-mustache">
+            <div class="user_added message">
+                <div class="username">
+                    <span class="glyphicon glyphicon-user"></span> {{username}} さんが入室しました。
+                </div>
+            </div>
+        </script>
+        <script id="chat_message_template" type="x-tmpl-mustache">
+            <div class="chat message">
+                <div class="username">
+                    <span class="glyphicon glyphicon-user"></span> {{username}}
+                </div>
+                <div class="comment">{{comment}}</div>
+            </div>
+        </script>
+    </div>
+</div>
+
+
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="js/mustache.min.js"></script>
+
+<!-- chatapp -->
+<script>
+    var username = "";
+    var ws, wsurl;
+    if(location.hostname == ""){
+        wsurl = "ws://192.168.59.103:57200/chat";
+    }else{
+        wsurl = "ws://"+location.hostname+":57200/chat";
+    }
+    ws = new WebSocket(wsurl);
+
+    ws.onopen = function(event){
+        console.log("socket on open.");
+    }
+
+    ws.onmessage = function(event){
+        var msg = JSON.parse(event.data);
+
+        switch (msg['type']){
+            case "user_logined":
+                username = msg['username'];
+                // ユーザー名のインサート
+                $("#username").html(username);
+                break;
+
+            case "user_added":
+                var html = Mustache.to_html( $("#user_added_template").html(), {
+                    username: msg["username"]
+                });
+                $('#messages').prepend(html);
+                break;
+
+            case "message_adding":
+                var html = Mustache.to_html( $("#chat_message_template").html(), {
+                    username: msg["username"],
+                    comment:  msg["comment"],
+                });
+                $('#messages').prepend(html);
+                break;
+
+        }
+    }
+
+    ws.onerror = function(event){
+        console.log("onerror");
+    }
+
+    $("#send_button").click( function(){
+        var msg = {
+            "type"     : "message_request",
+            "username" : username,
+            "comment"  : $("#message_box").val()
+        };
+
+        if(ws.readyState == 3){
+            alert("チャットサーバーとの接続に失敗しました。");
+        }
+
+        var json = JSON.stringify(msg);
+        ws.send(json);
+    });
+
+</script>
+</body>
+</html>
