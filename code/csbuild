@@ -4,7 +4,7 @@ require 'thor'
 class GCSBuildCLI < Thor
 
   @@packages = [
-    "vendor/nuget/WebSocketSharp.1.0.3-rc7/lib/websocket-sharp.dll",
+    "vendor/nuget/WebSocketSharp/lib/websocket-sharp.dll",
     "vendor/nuget/MongoDB.Driver/lib/net45/MongoDB.Driver.dll",
     "vendor/nuget/MongoDB.Bson/lib/net45/MongoDB.Bson.dll",
     "vendor/nuget/MongoDB.Driver.Core/lib/net45/MongoDB.Driver.Core.dll",

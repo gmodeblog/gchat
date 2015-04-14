@@ -1,6 +1,6 @@
 web:
   name: gchatapp
-  image: mito/mono:devblog
+  image: mito/devblog
   volumes:
     - code:/code
   ports:
